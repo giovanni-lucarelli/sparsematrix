@@ -2,7 +2,7 @@
 
 1. ~~create a working program in one file~~
 2. ~~check each method and const correctness~~
-3. add utility functions to convert a matrix from COO format to CSR and vice versa
+3. ~~add utility functions to convert a matrix from COO format to CSR and vice versa~~
 4. update the program with templated classes
 5. ~~create the header file~~
 6. create a makefile (specific compilations flags, see hw assignment)
