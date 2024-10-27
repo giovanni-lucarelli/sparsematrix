@@ -1,5 +1,5 @@
-#include <sparsematrix_class.h>
 #include <COO_class.hpp>
+#include <CSR_class.hpp>
 
 void SparseMatrixCOO::add_value(const unsigned int row, const unsigned int col, const double value){
         rows.push_back(row);
@@ -59,18 +59,24 @@ void SparseMatrixCOO::print() const {
             std::cout << "(" << rows[i] << ", " <<  columns[i] << ") = " << values[i] << std::endl;
         }
 }
-/* SparseMatrixCSR SparseMatrixCOO::toCSR() const {
-    SparseMatrixCSR csr(numRows, numCols);
 
-    // Step 1: Collect non-zero entries by rows
+SparseMatrixCSR SparseMatrixCOO::toCSR() const {
+    SparseMatrixCSR csrMatrix(numRows, numCols);
+    
+    // Initialize CSR structure
+    csrMatrix.row_idx.resize(numRows + 1, 0);
+    csrMatrix.values = values;
+    csrMatrix.columns = columns;
+    
+    // Populate row pointers
     for (unsigned int i = 0; i < rows.size(); ++i) {
-        csr.add_value(rows[i], columns[i], values[i]);
+        csrMatrix.row_idx[rows[i] + 1]++;
     }
-
-    // Step 2: Accumulate row pointers
-    for (unsigned int i = 1; i < csr.row_idx.size(); ++i) {
-        csr.row_idx[i] += csr.row_idx[i - 1];
+    
+    // Accumulate row counts
+    for (unsigned int i = 1; i < csrMatrix.row_idx.size(); ++i) {
+        csrMatrix.row_idx[i] += csrMatrix.row_idx[i - 1];
     }
-
-    return csr;
-} */
+    
+    return csrMatrix;
+}

@@ -1,6 +1,9 @@
-#pragma once
-#include <sparsematrix_class.h>
-//#include <CSR_class.cpp>
+#ifndef COO_CLASS_HPP
+#define COO_CLASS_HPP
+
+#include <sparsematrix_class.hpp>
+
+class SparseMatrixCSR; // needed to declare the convertor
 
 class SparseMatrixCOO : public SparseMatrix {
 private:
@@ -11,7 +14,6 @@ private:
     std::vector<unsigned int> columns;
 
 public:
-
     friend class SparseMatrixCSR;
     //new constructor
     SparseMatrixCOO(const unsigned int rows, const unsigned int cols): numRows(rows), numCols(cols) {}
@@ -24,5 +26,7 @@ public:
     double& operator() (const unsigned int row_idx, const unsigned int col_idx) override;
     std::vector<double> operator*(const std::vector<double>& vec) const override;
     void print() const override;
-    /* SparseMatrixCSR SparseMatrixCOO::toCSR() const; */
+    SparseMatrixCSR toCSR() const;
 };
+
+#endif // COO_CLASS_HPP

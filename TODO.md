@@ -8,6 +8,7 @@
 6. create a makefile (specific compilations flags, see hw assignment)
 7. write tests in the main file 
 8. write a readme file
+9. check the inline methods
 
 
 ## Problems

@@ -1,6 +1,9 @@
-#pragma once
-#include <sparsematrix_class.h>
-//#include <COO_class.hpp>
+#ifndef CSR_CLASS_HPP
+#define CSR_CLASS_HPP
+
+#include <sparsematrix_class.hpp>
+
+class SparseMatrixCOO; // needed to declare the convertor
 
 class SparseMatrixCSR : public SparseMatrix {
 private:
@@ -10,7 +13,6 @@ private:
     std::vector<unsigned int> row_idx;       // Cada elemento de este cector indica donde comienza cada fila en values
 
 public:
-
     friend class SparseMatrixCOO;
     SparseMatrixCSR(const unsigned int rows, const unsigned int cols)
     : numRows(rows), numCols(cols), row_idx(rows + 1, 0) {}
@@ -22,6 +24,8 @@ public:
     double operator()(const unsigned int r_idx, const unsigned int c_idx) const override;
     double& operator()(const unsigned int r_idx, const unsigned int c_idx) override;
     std::vector<double> operator*(const std::vector<double>& vec) const override;
-    //SparseMatrixCOO toCOO() const;
     void print() const override;
+    SparseMatrixCOO toCOO() const;
 };
+
+#endif // CSR_CLASS_HPP

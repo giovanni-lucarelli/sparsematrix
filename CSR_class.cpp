@@ -1,11 +1,25 @@
-#include <sparsematrix_class.h>
 #include <CSR_class.hpp>
+#include <COO_class.hpp>
 
 void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, const double value){
-        values.push_back(value);
-        columns.push_back(col);
-        row_idx[row + 1]++;
+    if (row >= numRows || col >= numCols) {
+        throw std::out_of_range("Row or column index out of bounds");
     }
+
+    // Add the value and its column index
+    values.push_back(value);
+    columns.push_back(col);
+
+    // Ensure row_idx is large enough and update row pointers
+    if (row_idx.size() <= row + 1) {
+        row_idx.resize(row + 2, row_idx.back());  // Extend row_idx to handle the new row
+    }
+
+    // Increment the row pointer for the current row and all following rows
+    for (unsigned int i = row + 1; i < row_idx.size(); ++i) {
+        row_idx[i]++;
+    }
+}
 unsigned int SparseMatrixCSR::get_columns(){
         return numCols;
     }
@@ -81,15 +95,14 @@ void SparseMatrixCSR::print() const {
         }
     }
 }
-/* SparseMatrixCOO SparseMatrixCSR::toCOO() const {
-    SparseMatrixCOO coo(numRows, numCols);
-    // Traverse through each row
+SparseMatrixCOO SparseMatrixCSR::toCOO() const {
+    SparseMatrixCOO cooMatrix(numRows, numCols);
     for (unsigned int row = 0; row < numRows; ++row) {
         for (unsigned int idx = row_idx[row]; idx < row_idx[row + 1]; ++idx) {
-            coo.rows.push_back(row);
-            coo.columns.push_back(columns[idx]);
-            coo.values.push_back(values[idx]);
+            cooMatrix.rows.push_back(row);
+            cooMatrix.columns.push_back(columns[idx]);
+            cooMatrix.values.push_back(values[idx]);
         }
     }
-    return coo;
-} */
+    return cooMatrix;
+}
