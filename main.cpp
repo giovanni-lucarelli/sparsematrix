@@ -3,11 +3,13 @@
 #include <stdexcept>
 #include <iomanip>
 
+// Declaramos una clase base abstracta SparseMatrix, que define la interfaz para cualquier matriz dispersa
 class SparseMatrix {
 public:
     virtual unsigned int get_columns() = 0;
     virtual unsigned int get_rows() = 0;
     virtual unsigned int get_nnz() = 0;
+
     virtual double operator() (unsigned int row_idx, unsigned int col_idx) const = 0;  //reading on const
     virtual double& operator() (unsigned int row_idx, unsigned int col_idx) = 0;        //reading on non const
     //matrix product
@@ -18,87 +20,8 @@ public:
     virtual ~SparseMatrix() = default;
 };
 
-class SparseMatrixCOO : public SparseMatrix {
-private:
-    unsigned int numRows;
-    unsigned int numCols;
-    std::vector<double> values;
-    std::vector<unsigned int> rows;
-    std::vector<unsigned int> columns;
-    static const double zero;
-public:
-    // COO constructor
-    explicit SparseMatrixCOO(const std::vector<std::vector<double>>& matrix) {
-        numRows = matrix.size();
-        numCols = matrix[0].size();
-        for (unsigned int i = 0; i < matrix.size(); i++) {
-            for (unsigned int j = 0; j < matrix[i].size(); j++) {
-                if (matrix[i][j] != 0) {
-                    values.push_back(matrix[i][j]);
-                    rows.push_back(i);
-                    columns.push_back(j);
-                }
-            }
-        }
-    }
-    unsigned int get_columns() override {
-        return numCols;
-    }
-    unsigned int get_rows() override {
-        return numRows;
-    }
-    unsigned int get_nnz() override {
-        return values.size();
-    }
-    double operator() (const unsigned int row_idx, const unsigned int col_idx) const override {
-        if (row_idx > numRows || col_idx > numCols || row_idx <= 0 || col_idx <= 0) {
-            throw std::invalid_argument("row index or column index is out of range");
-        }
-        for (unsigned int i = 0; i < rows.size(); i++) {
-            if (rows[i]==(row_idx-1) and columns[i] == (col_idx-1)) {
-                return values[i];
-            }
-        }
-        return 0.0;
-    }
-    double& operator() (const unsigned int row_idx, const unsigned int col_idx) override {
-        if (row_idx > numRows || col_idx > numCols || row_idx <= 0 || col_idx <= 0) {
-            throw std::invalid_argument("row index or column index is out of range");
-        }
-        for (unsigned int i = 0; i < rows.size(); i++) {
-            if (rows[i]==(row_idx-1) and columns[i] == (col_idx-1)) {
-                return values[i];
-            }
-        }
 
-        std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated. Allocating now." << std::endl;
-        rows.push_back(row_idx-1);
-        columns.push_back(col_idx-1);
-        values.push_back(0.0);
-        //Return a reference to the newly allocated entry
-        return values.back();
-    }
-    std::vector<double> operator*(const std::vector<double>& vec) const override {
-        if (vec.size() != numCols) {
-            throw std::invalid_argument("Vector size must match the number of columns in the matrix.");
-        }
-        std::vector<double> result(numRows, 0.0); // Initialize result vector with zeros
-        for (unsigned int i = 0; i <= values.size(); ++i) {
-            result[rows[i]] += values[i] * vec[columns[i]];
-        }
-        return result;
-    }
-    void print() const override {
-        std::cout << "Sparse Matrix (COO format):" << std::endl;
-        std::cout << "Row\tColumn\tValue" << std::endl;
-        for (size_t i = 0; i < values.size(); ++i) {
-            std::cout << rows[i] << "\t" << columns[i] << "\t" << std::setw(8) << values[i] << std::endl;
-        }
-
-    }
-};
-
-class SparseMatrixCSR : public SparseMatrix {
+class CSRMatrix : public SparseMatrix {
 private:
     unsigned int numRows, numCols;  // Guardan el número de filas y columnas de la matrix
     std::vector<double> values;      // Almacena los valores no nulos
@@ -107,7 +30,7 @@ private:
     static const double zero;
 public:
     // Constructor a partir de una matriz densa
-    explicit SparseMatrixCSR(const std::vector<std::vector<double>>& matrix) {
+    explicit CSRMatrix(const std::vector<std::vector<double>>& matrix) {
         // Inicialización
         numRows = matrix.size();
         numCols = matrix[0].size();
@@ -125,17 +48,17 @@ public:
         }
     }
 
-    unsigned int get_columns() override {
-        return numCols;
+    unsigned int get_columns() override { 
+        return numCols; 
     }
-    unsigned int get_rows() override {
-        return numRows;
+    unsigned int get_rows() override { 
+        return numRows; 
     }
-    unsigned int get_nnz() override {
-        return values.size();
+    unsigned int get_nnz() override { 
+        return values.size(); 
     }
 
-    double operator()(const unsigned int row_idx, const unsigned int col_idx) const override {
+    double operator()(unsigned int row_idx, unsigned int col_idx) const override {
         if (row_idx >= numRows || col_idx >= numCols || row_idx < 0 || col_idx < 0) {
             throw std::out_of_range("Índices fuera de límites");
         }
@@ -148,7 +71,7 @@ public:
         return 0.0;  // Si no se encuentra el valor, retornar cero
     }
 
-    double& operator()(const unsigned int row_idx, const unsigned int col_idx) override {
+    double& operator()(unsigned int row_idx, unsigned int col_idx) override {
         if (row_idx >= numRows || col_idx >= numCols || row_idx < 0 || col_idx < 0) {
             throw std::out_of_range("Índices fuera de límites");
         }
@@ -181,7 +104,7 @@ public:
 
         return values[insert_pos];
     }
-
+        
     std::vector<double> operator*(const std::vector<double>& vec) const override {
         if (vec.size() != numCols) {
             throw std::invalid_argument("Dimensión incompatible para la multiplicación.");
@@ -216,20 +139,38 @@ public:
             std::cout << val << " ";
         }
         std::cout << std::endl;
+    
+        for (unsigned int row = 0; row < numRows; row++) {
+            for (unsigned int i = rows[row]; i < rows[row + 1]; i++) {
+               std::cout << "(" << row << ", " << columns[i] << ") = " << values[i] << std::endl;
+            }
+        }
     }
 };
 
 int main() {
-    const std::vector<std::vector<double>> matrix ={
-            {0, 0, 3},
-            {0, 0, 0},
-            {1, 0, 2}
-        };
+    const std::vector<std::vector<double>> matrix = {
+        {0, 0, 3},
+        {0, 0, 0},
+        {1, 0, 2}
+    };
 
-    SparseMatrixCOO sparse1(matrix);
+    // Crear la matriz dispersa en formato CSR
+    CSRMatrix sparse2(matrix);
 
-    sparse1(1,1) = 7.0;
-    sparse1.print();
+    // Imprimir la matriz CSR
+    sparse2.print();
+
+    // Modificar un elemento (si está implementado en tu clase CSRMatrix)
+    try {
+        sparse2(1, 1) = 7.0; // Esto puede requerir que ajustes tu lógica de acceso
+        std::cout << "Elemento en (1, 1) modificado a 7.0" << std::endl;
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    // Imprimir la matriz nuevamente para ver el cambio
+    sparse2.print();
 
     return 0;
 }
