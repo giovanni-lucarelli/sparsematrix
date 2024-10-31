@@ -7,10 +7,10 @@ class SparseMatrixCOO; // needed to declare the convertor
 
 class SparseMatrixCSR : public SparseMatrix {
 private:
-    unsigned int numRows, numCols;  // Guardan el número de filas y columnas de la matrix
-    std::vector<double> values;      // Almacena los valores no nulos
-    std::vector<unsigned int> columns;     // Almacena los índices de columna de los valores
-    std::vector<unsigned int> row_idx;       // Cada elemento de este cector indica donde comienza cada fila en values
+    unsigned int numRows, numCols;  // Store the number of rows and columns of the matrix
+    std::vector<double> values;      // Stores non-null values
+    std::vector<unsigned int> columns;     // Stores the column indices of values
+    std::vector<unsigned int> row_idx;       // Each element of this vector indicates where each row in values begins
 
 public:
     friend class SparseMatrixCOO;
