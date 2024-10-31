@@ -16,7 +16,7 @@ void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, 
     }
 
     // Increment the row pointer for the current row and all following rows
-    for (unsigned int i = row + 1; i < row_idx.size(); ++i) {
+    for (unsigned int i = row + 1; i < row_idx.size(); i++) {
         row_idx[i]++;
     }
 }
@@ -31,7 +31,7 @@ unsigned int SparseMatrixCSR::get_nnz(){
     }
 double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx) const {
         if (r_idx >= numRows || c_idx >= numCols) {
-            throw std::out_of_range("Índices fuera de límites");
+            throw std::out_of_range("row index or column index is out of range");
         }
 
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
@@ -39,23 +39,23 @@ double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int 
                 return values[i];
             }
         }
-        return 0.0;  // Si no se encuentra el valor, retornar cero
+        return 0.0;  // If no value is found, return zero
     }
+
+// Method for adding a value in the sparse matrix CSR
 double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx){
         if (r_idx >= numRows || c_idx >= numCols ) {
-            throw std::out_of_range("Índices fuera de límites");
+            throw std::out_of_range("row index or column index is out of range");
         }
 
-        // Búsqueda de valor existente: se recorre la sección correspondiente de la fila para encontrar el valor. Si se encuentra, se devuelve una referencia a él.
+        // Search for an existing value in the specidfied row. Si se encuentra
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
             if (columns[i] == c_idx) {
-                return values[i];
+                return values[i]; // Return a reference to the value if found
             }
         }
-        // Si no se encuentra, añadir un nuevo valor
-        // Insertar en la posición correcta para mantener el orden
-        // Se determina la posición de inserción correcta para mantener el orden de las columnas.
-        // Luego, se iserta un nuevo valor 0.0 y se actualizan los índices de columna y fila
+        
+        // Determine the correct insertion position to maintain column order
         unsigned int insert_pos = row_idx[r_idx + 1];
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
             if (columns[i] > c_idx) {
@@ -64,19 +64,23 @@ double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int
             }
         }
 
+        // Insert a new value (0.0) and update column and row indices
         values.insert(values.begin() + insert_pos, 0.0);
         columns.insert(columns.begin() + insert_pos, c_idx);
 
-        // Actualizar los índices de fila, después de insertar un nuevo valor, se incrementan los índices en rows para las filas posteriores
+        // Update row indexes to reflect the addition of a new element
+        // Increment the row pointers for all subsequent rows to account for the new entry
         for (unsigned int i = r_idx + 1; i <= numRows; i++) {
             row_idx[i]++;
         }
 
-        return values[insert_pos];
+        return values[insert_pos]; // Return a reference to the newly inserted value
     }
+
+// Matrix-vector multiplication
 std::vector<double> SparseMatrixCSR::operator*(const std::vector<double>& vec) const {
         if (vec.size() != numCols) {
-            throw std::invalid_argument("Dimensión incompatible para la multiplicación.");
+            throw std::invalid_argument("Vector size must match the number of columns in the matrix.");
         }
 
         std::vector<double> result(numRows, 0.0);
@@ -85,7 +89,7 @@ std::vector<double> SparseMatrixCSR::operator*(const std::vector<double>& vec) c
                 result[row] += values[i] * vec[columns[i]];
             }
         }
-        return result;
+        return result; // Return the resulting vector
     }
 void SparseMatrixCSR::print() const {
     std::cout << "Sparse Matrix (CSR format):" << std::endl;
@@ -97,8 +101,11 @@ void SparseMatrixCSR::print() const {
 }
 SparseMatrixCOO SparseMatrixCSR::toCOO() const {
     SparseMatrixCOO cooMatrix(numRows, numCols);
-    for (unsigned int row = 0; row < numRows; ++row) {
-        for (unsigned int idx = row_idx[row]; idx < row_idx[row + 1]; ++idx) {
+    for (unsigned int row = 0; row < numRows; row++) {
+        // Iterates over each non-null element in the current row ‘row’
+        // row_idx[row] gives the starting index in ‘values’ of the current row
+        // row_idx[row + 1] gives the final (non-inclusive) index of that row
+        for (unsigned int idx = row_idx[row]; idx < row_idx[row + 1]; idx++) {
             cooMatrix.rows.push_back(row);
             cooMatrix.columns.push_back(columns[idx]);
             cooMatrix.values.push_back(values[idx]);
