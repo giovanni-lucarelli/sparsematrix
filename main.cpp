@@ -14,30 +14,47 @@ int main() {
     
     csr.print();
 
-    // Matrix-vector multiplication
-    std::vector<double> vector = {1.0, 2.0, 3.0, 4.0};
-    std::vector<double> result = csr * vector;
-    std::cout << "CSR * vector:" << std::endl;
-    for (const auto& val : result) {
+    // Test 1: Matrix-vector multiplication with v = [1, 1, 1, 1]
+    std::vector<double> ones_vector = {1, 1, 1, 1};
+    std::vector<double> result = csr * ones_vector;
+    std::cout << "\nResult of CSR * [1, 1, 1, 1] (should be row sums):" << std::endl;
+    for (double val : result) {
         std::cout << val << " ";
     }
     std::cout << std::endl << std::endl;
 
-    // Check the access operator to obtain a non-zero value and a null value from the matrix
+    // Test 2: Matrix-vector multiplication with v = e_i
+    std::vector<double> e0 = {1, 0, 0, 0}; //  Test e_0, which should return the first column of M
+    result = csr * e0;
+    std::cout << "\nResult of CSR * e_0 (should be first column):" << std::endl;
+    for (double val : result) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl << std::endl;
+
+    // Additional tests
+
+    // Test 3: Check the access operator to obtain a non-zero value and a null value from the matrix
     std::cout << "Value in position (1, 0): " << csr(1, 0) << std::endl;  // Should print 4.0
     std::cout << "Value in position (2, 1): " << csr(2, 1) << std::endl;  // Should print 0.0
     std::cout << std::endl;
 
-    // Test the addition of a value
+    // Test 4: Adding another non-zero element and printing
     csr(4, 2) = 9.4;
     std::cout << "Matrix CSR after adding a value:" << std::endl;
     csr.print();
     std::cout << std::endl;
     
-    SparseMatrixCOO c1(1,1);
+    // SparseMatrixCOO c1(1,1); ???
 
-    csr.toCOO().print();
-    csr.toCOO().toCSR().print();
+    // Test 5: Conversion from CSR to COO and back
+    std::cout << "Converting CSR to COO format:" << std::endl;
+    SparseMatrixCOO cooMatrix = csr.toCOO();
+    cooMatrix.print();
+
+    std::cout << "Converting COO back to CSR format:" << std::endl;
+    SparseMatrixCSR csrConverted = cooMatrix.toCSR(); 
+    csrConverted.print();
 
     return 0;
 }
