@@ -41,7 +41,7 @@ int main() {
     std::cout << std::endl;
 
     // Test 4: Adding another non-zero element and printing
-    csr(4, 2) = 9.4;
+    csr(3, 1) = 7;
     std::cout << "Matrix CSR after adding a value:" << std::endl;
     csr.print();
     std::cout << std::endl;
@@ -55,6 +55,51 @@ int main() {
 
     std::cout << "Converting COO back to CSR format:" << std::endl;
     SparseMatrixCSR csrConverted = cooMatrix.toCSR(); 
+    csrConverted.print();
+
+    SparseMatrixCOO coo(6, 4);
+
+    // Add some non-zero values  
+    coo(0, 1) = 3.0;
+    coo(1, 0) = 4.0;
+    coo(2, 2) = 5.0;
+    coo(3, 3) = 6.7;
+    coo(0, 2) = 1.5;
+
+    coo.print();
+
+    // Test 1: Matrix-vector multiplication with v = [1, 1, 1, 1]
+    result = coo * ones_vector; 
+    std::cout << "\nResult of COO * [1, 1, 1, 1] (should be row sums):" << std::endl;
+    for (double val : result) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl << std::endl;
+
+    // Test 2: Matrix-vector multiplication with v = e_i
+    result = coo * e0;
+    std::cout << "\nResult of COO * e_0 (should be first column):" << std::endl;
+    for (double val : result) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl << std::endl;
+
+    // Additional tests
+
+    // Test 3: Check the access operator to obtain a non-zero value and a null value from the matrix
+    std::cout << "Value in position (1, 0): " << coo(1, 0) << std::endl;  // Should print 4.0
+    std::cout << "Value in position (2, 1): " << coo(2, 1) << std::endl;  // Should print 0.0
+    std::cout << std::endl;
+
+    // Test 4: Adding another non-zero element and printing
+    coo(3, 1) = 7.0;
+    std::cout << "Matrix COO after adding a value:" << std::endl;
+    coo.print();
+    std::cout << std::endl;
+
+    // Test 5: Conversion from CSR to COO and back
+    std::cout << "Converting COO to CSR format:" << std::endl;
+    SparseMatrixCSR csrMatrix = coo.toCSR(); 
     csrConverted.print();
 
     return 0;
