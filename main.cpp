@@ -6,12 +6,19 @@ int main() {
     SparseMatrixCSR csr(6, 4);
 
     // Add some non-zero values
-    csr.add_value(0, 1, 3.0);
-    csr.add_value(1, 0, 4.0);
-    csr.add_value(2, 2, 5.0);
-    csr.add_value(3, 3, 6.7);
-    csr.add_value(0, 2, 1.5);
+    //csr.add_value(0, 1, 3.0);
+    //csr.add_value(1, 0, 4.0);
+    //csr.add_value(2, 2, 5.0);
+    //csr.add_value(3, 3, 6.7);
+    //csr.add_value(0, 2, 1.5);
     
+    csr(0, 1) = 3.0;
+    csr(1, 0) = 4.0;
+    csr(2, 2) = 5.0;
+    csr(3, 3) = 6.7;
+    csr(0, 2) = 1.5;
+
+
     csr.print();
 
     // Test 1: Matrix-vector multiplication with v = [1, 1, 1, 1]

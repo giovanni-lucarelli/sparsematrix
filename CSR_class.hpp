@@ -15,7 +15,7 @@ private:
 public:
     friend class SparseMatrixCOO;
     SparseMatrixCSR(const unsigned int rows, const unsigned int cols)
-    : numRows(rows), numCols(cols), row_idx(rows + 1, 0) {}
+    : numRows(rows), numCols(cols), row_idx(rows + 1, 0) {} //initializing row_idx vector with zeros
     // Method to add a non-zero entry (helper for the conversion process)
     void add_value(const unsigned int row, const unsigned int col, const double value) override;
     unsigned int get_columns() override;
