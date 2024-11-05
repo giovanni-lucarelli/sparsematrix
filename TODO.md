@@ -6,10 +6,12 @@
 4. ~~create the header file~~
 5. update the program with templated classes
 6. ~~create a makefile (specific compilations flags, see hw assignment)~~
-7. write tests in the main file 
+7. write tests in the main file (for both classes)
 8. write a readme file & add comments to the code
 9. check the inline methods
 10. check the const correctness
+11. create the from_dense method
+12. fix the print function: print the size of the matrix at the beginning
 
 
 ## Problems
