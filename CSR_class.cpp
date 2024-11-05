@@ -74,6 +74,7 @@ std::vector<double> SparseMatrixCSR::operator*(const std::vector<double>& vec) c
     }
 void SparseMatrixCSR::print() const {
     std::cout << "Sparse Matrix (CSR format):" << std::endl;
+    std::cout << "Matrix's shape: " << numRows << " x " << numCols << std::endl;
     for (unsigned int row = 0; row < numRows; row++) {
         for (unsigned int i = row_idx[row]; i < row_idx[row + 1]; i++) {
             std::cout << "(" << row << ", " << columns[i] << ") = " << values[i] << std::endl;

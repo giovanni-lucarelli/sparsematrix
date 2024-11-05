@@ -50,9 +50,15 @@ std::vector<double> SparseMatrixCOO::operator*(const std::vector<double>& vec) c
     }
 void SparseMatrixCOO::print() const {
         std::cout << "Sparse Matrix (COO format):" << std::endl;
-        for (unsigned int i = 0; i < values.size(); ++i) {
-            std::cout << "(" << rows[i] << ", " <<  columns[i] << ") = " << values[i] << std::endl;
-        }
+        std::cout << "Matrix's shape: " << numRows << " x " << numCols << std::endl;
+    
+        for (unsigned int row = 0; row < numRows; ++row) {
+            for (unsigned int i = 0; i < values.size(); ++i) {
+                if (rows[i] == row) {
+                    std::cout << "(" << rows[i] << ", " << columns[i] << ") = " << values[i] << std::endl;
+                }
+            }
+        }          
 }
 
 SparseMatrixCSR SparseMatrixCOO::toCSR() const {
