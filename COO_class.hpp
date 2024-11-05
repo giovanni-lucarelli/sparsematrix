@@ -17,8 +17,6 @@ public:
     friend class SparseMatrixCSR;
     //new constructor
     SparseMatrixCOO(const unsigned int rows, const unsigned int cols): numRows(rows), numCols(cols) {}
-    // Method to add a non-zero entry
-    void add_value(const unsigned int row, const unsigned int col, const double value) override;
     unsigned int get_columns() override;
     unsigned int get_rows() override;
     unsigned int get_nnz() override;

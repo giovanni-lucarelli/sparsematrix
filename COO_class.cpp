@@ -1,11 +1,6 @@
 #include <COO_class.hpp>
 #include <CSR_class.hpp>
 
-void SparseMatrixCOO::add_value(const unsigned int row, const unsigned int col, const double value){
-        rows.push_back(row);
-        columns.push_back(col);
-        values.push_back(value);
-    }
 unsigned int SparseMatrixCOO::get_columns(){
         return numCols;
     }

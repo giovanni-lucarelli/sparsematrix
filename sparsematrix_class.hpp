@@ -8,7 +8,6 @@
 
 class SparseMatrix {
 public:
-    virtual void add_value(unsigned int row, unsigned int col, double value) = 0;
     virtual unsigned int get_columns() = 0;
     virtual unsigned int get_rows() = 0;
     virtual unsigned int get_nnz() = 0;

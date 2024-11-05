@@ -5,13 +5,7 @@
 int main() {
     SparseMatrixCSR csr(6, 4);
 
-    // Add some non-zero values
-    //csr.add_value(0, 1, 3.0);
-    //csr.add_value(1, 0, 4.0);
-    //csr.add_value(2, 2, 5.0);
-    //csr.add_value(3, 3, 6.7);
-    //csr.add_value(0, 2, 1.5);
-    
+    // Add some non-zero values   
     csr(0, 1) = 3.0;
     csr(1, 0) = 4.0;
     csr(2, 2) = 5.0;

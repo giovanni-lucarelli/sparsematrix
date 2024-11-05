@@ -1,25 +1,6 @@
 #include <CSR_class.hpp>
 #include <COO_class.hpp>
 
-void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, const double value){
-    if (row >= numRows || col >= numCols) {
-        throw std::out_of_range("Row or column index out of bounds");
-    }
-
-    // Add the value and its column index
-    values.push_back(value);
-    columns.push_back(col);
-
-    // Ensure row_idx is large enough and update row pointers
-    if (row_idx.size() <= row + 1) {
-        row_idx.resize(row + 2, row_idx.back());  // Extend row_idx to handle the new row
-    }
-
-    // Increment the row pointer for the current row and all following rows
-    for (unsigned int i = row + 1; i < row_idx.size(); i++) {
-        row_idx[i]++;
-    }
-}
 unsigned int SparseMatrixCSR::get_columns(){
         return numCols;
     }
