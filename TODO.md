@@ -11,6 +11,7 @@
 9. check the inline methods
 10. check the const correctness
 11. create the from_dense method
+12. fix the print function: print the size of the matrix at the beginning
 
 
 ## Problems
