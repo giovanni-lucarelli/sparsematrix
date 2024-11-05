@@ -12,6 +12,8 @@ int main() {
     csr(3, 3) = 6.7;
     csr(0, 2) = 1.5;
 
+    csr(1,1);
+
 
     csr.print();
 
