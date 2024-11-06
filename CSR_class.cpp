@@ -15,6 +15,11 @@ void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, 
         if (row >= numRows || col >= numCols ) {
             throw std::out_of_range("row index or column index is out of range");
         }
+        // If the value is zero, we do not insert it
+        if (value == 0.0) {
+            std::cout << "Warning: Attempted to add a zero at position (" << row << ", " << col << ") - it will not be stored." << std::endl;
+            return;  // Zero value is not added
+        }
         // Determine the correct insertion position to maintain column order
         unsigned int insert_pos = row_idx[row + 1];
         for (unsigned int i = row_idx[row]; i < row_idx[row + 1]; i++) {
@@ -23,11 +28,9 @@ void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, 
                 break;
             }
         }
-
-        // Insert a new value (0.0) and update column and row indices
+        // Insert a new value and update column and row indices
         values.insert(values.begin() + insert_pos, value);
         columns.insert(columns.begin() + insert_pos, col);
-
         // Update row indexes to reflect the addition of a new element
         // Increment the row pointers for all subsequent rows to account for the new entry
         for (unsigned int i = row + 1; i <= numRows; i++) {
@@ -39,7 +42,7 @@ const double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigne
         if (r_idx >= numRows || c_idx >= numCols) {
             throw std::out_of_range("row index or column index is out of range");
         }
-
+        // if the value indexed by (row,col) exists return the value
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
             if (columns[i] == c_idx) {
                 return values[i];
@@ -48,39 +51,18 @@ const double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigne
         return 0.0;  // If no value is found, return zero
     }
 
-// Method for adding a value in the sparse matrix CSR
 double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx){
         if (r_idx >= numRows || c_idx >= numCols ) {
             throw std::out_of_range("row index or column index is out of range");
         }
-
-        // Search for an existing value in the specidfied row. Si se encuentra
+        // Search for an existing value in the specidfied row. If the value indexed by (row,col) exists return the value
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
             if (columns[i] == c_idx) {
                 return values[i]; // Return a reference to the value if found
             }
         }
-        throw std::invalid_argument("Data not allocated");
-        /* // Determine the correct insertion position to maintain column order
-        unsigned int insert_pos = row_idx[r_idx + 1];
-        for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
-            if (columns[i] > c_idx) {
-                insert_pos = i;
-                break;
-            }
-        }
-
-        // Insert a new value (0.0) and update column and row indices
-        values.insert(values.begin() + insert_pos, 0.0);
-        columns.insert(columns.begin() + insert_pos, c_idx);
-
-        // Update row indexes to reflect the addition of a new element
-        // Increment the row pointers for all subsequent rows to account for the new entry
-        for (unsigned int i = r_idx + 1; i <= numRows; i++) {
-            row_idx[i]++;
-        }
-
-        return values[insert_pos]; // Return a reference to the newly inserted value */
+        // if not throw an error bc w/ this method you cannot allocate/assign new values
+        throw std::invalid_argument("Cannot access an unallocated value");
     }
 
 // Matrix-vector multiplication
@@ -88,7 +70,7 @@ std::vector<double> SparseMatrixCSR::operator*(const std::vector<double>& vec) c
         if (vec.size() != numCols) {
             throw std::invalid_argument("Vector size must match the number of columns in the matrix.");
         }
-
+        // Initialize result vector with zeros
         std::vector<double> result(numRows, 0.0);
         for (unsigned int row = 0; row < numRows; row++) {
             for (unsigned int i = row_idx[row]; i < row_idx[row + 1]; i++) {
@@ -97,6 +79,7 @@ std::vector<double> SparseMatrixCSR::operator*(const std::vector<double>& vec) c
         }
         return result; // Return the resulting vector
     }
+
 void SparseMatrixCSR::print() const {
     std::cout << "Sparse Matrix (CSR format):" << std::endl;
     std::cout << "Matrix's shape: " << numRows << " x " << numCols << std::endl;
@@ -106,6 +89,7 @@ void SparseMatrixCSR::print() const {
         }
     }
 }
+
 SparseMatrixCOO SparseMatrixCSR::toCOO() const {
     SparseMatrixCOO cooMatrix(numRows, numCols);
     for (unsigned int row = 0; row < numRows; row++) {

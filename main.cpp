@@ -6,11 +6,11 @@ int main() {
     SparseMatrixCSR csr(6, 4);
 
     // Add some non-zero values   
-    csr.add_value(0, 1,3.0);
-    csr.add_value(1, 0,4.0);
-    csr.add_value(2, 2,5.0);
-    csr.add_value(3, 3,6.7);
-    csr.add_value(0, 2,1.5);
+    csr.add_value(0, 1, 3.0);
+    csr.add_value(1, 0, 4.0);
+    csr.add_value(2, 2, 5.0);
+    csr.add_value(3, 3, 6.7);
+    csr.add_value(0, 2, 1.5);
 
     std::cout << "\n### ----- CSR CLASS TESTS ----- ###" << std::endl;
     csr.print();
@@ -29,6 +29,9 @@ int main() {
     std::cout << " - Element (0,1) after the update (3.14): " << csr(0,1) << std::endl;
     std::cout << " - Whole sparse matrix after the update: \n" << std::endl;
     csr.print();
+    
+    std::cout << " \n- Trying to add a zero value: \n" << std::endl;
+    csr.add_value(0, 1, 0.0); 
 
     // Test 1: Matrix-vector multiplication with v = [1,1,1,1]
     std::cout << "\n### Test 1: Matrix-vector multiplication ###" << std::endl;
@@ -75,11 +78,11 @@ int main() {
     std::cout << "\n### ----- COO CLASS TESTS ----- ###" << std::endl;
     std::cout << "\n - Declaring new values" << std::endl;
     // Add some non-zero values   
-    coo.add_value(0, 1,1.0);
-    coo.add_value(1, 0,2.0);
-    coo.add_value(2, 2,3.0);
-    coo.add_value(3, 3,4.1);
-    coo.add_value(0, 2,5.2);
+    coo.add_value(0, 1, 1.0);
+    coo.add_value(1, 0, 2.0);
+    coo.add_value(2, 2, 3.0);
+    coo.add_value(3, 3, 4.1);
+    coo.add_value(0, 2, 5.2);
     coo.print();
 
     // Test 0: Basic methods tests
@@ -96,6 +99,9 @@ int main() {
     std::cout << " - Element (0,1) after the update (3.14): " << coo(0,1) << std::endl;
     std::cout << " - Whole sparse matrix after the update: \n" << std::endl;
     coo.print();
+
+    std::cout << " \n- Trying to add a zero value: \n" << std::endl;
+    coo.add_value(0, 1, 0.0); 
 
     // Test 1: Matrix-vector multiplication with v = [1,1,1,1]
     std::cout << "\n### Test 1: Matrix-vector multiplication ###" << std::endl;
@@ -123,9 +129,10 @@ int main() {
     }
     std::cout << "]\n" << std::endl;
 
-    
-
     //final test: it should throw an error looking for data not allocated
+    csr(1,1) = 2;
+    std::cout << " " << csr(1,2) << std::endl;
+
 
     
 }

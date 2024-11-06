@@ -16,6 +16,11 @@ void SparseMatrixCOO::add_value(const unsigned int row, const unsigned int col, 
         if (row >= numRows || col >= numCols) {
             throw std::invalid_argument("row index or column index is out of range");
         }
+        // If the value is zero, we do not insert it
+        if (value == 0.0) {
+            std::cout << "Warning: Attempted to add a zero at position (" << row << ", " << col << ") - it will not be stored." << std::endl;
+            return;  // Zero value is not added
+        }
         //storing the new value according to the COO representation
         rows.push_back(row);
         columns.push_back(col);
@@ -47,7 +52,7 @@ double& SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned 
             }
         }
         // if not throw an error bc w/ this method you cannot allocate/assign new values
-        throw std::invalid_argument("Data not allocated");
+        throw std::invalid_argument("Cannot access an unallocated value");
     }
 
 std::vector<double> SparseMatrixCOO::operator*(const std::vector<double>& vec) const{
