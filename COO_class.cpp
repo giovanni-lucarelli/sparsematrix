@@ -1,13 +1,13 @@
 #include <COO_class.hpp>
 #include <CSR_class.hpp>
 
-unsigned int SparseMatrixCOO::get_columns(){
+unsigned int SparseMatrixCOO::get_columns()const {
         return numCols;
     }
-unsigned int SparseMatrixCOO::get_rows(){
+unsigned int SparseMatrixCOO::get_rows()const{
         return numRows;
     }
-unsigned int SparseMatrixCOO::get_nnz(){
+unsigned int SparseMatrixCOO::get_nnz()const{
         return values.size();
     }
 

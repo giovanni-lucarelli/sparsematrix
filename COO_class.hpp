@@ -17,9 +17,9 @@ public:
     friend class SparseMatrixCSR;
     //new constructor
     SparseMatrixCOO(const unsigned int rows, const unsigned int cols): numRows(rows), numCols(cols) {}
-    unsigned int get_columns() override;
-    unsigned int get_rows() override;
-    unsigned int get_nnz() override;
+    unsigned int get_columns() const override;
+    unsigned int get_rows() const override;
+    unsigned int get_nnz() const override;
     void add_value(const unsigned int row, const unsigned int col, const double value);
     const double operator() (const unsigned int row_idx, const unsigned int col_idx) const override;
     double& operator() (const unsigned int row_idx, const unsigned int col_idx) override;

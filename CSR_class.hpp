@@ -17,9 +17,9 @@ public:
     SparseMatrixCSR(const unsigned int rows, const unsigned int cols)
     : numRows(rows), numCols(cols), row_idx(rows + 1, 0) {} //initializing row_idx vector with zeros
     // Method to add a non-zero entry (helper for the conversion process)
-    unsigned int get_columns() override;
-    unsigned int get_rows() override;
-    unsigned int get_nnz() override;
+    unsigned int get_columns() const override;
+    unsigned int get_rows() const override;
+    unsigned int get_nnz() const override;
     void add_value(const unsigned int row, const unsigned int col, const double value);
     const double operator()(const unsigned int r_idx, const unsigned int c_idx) const override;
     double& operator()(const unsigned int r_idx, const unsigned int c_idx) override;
