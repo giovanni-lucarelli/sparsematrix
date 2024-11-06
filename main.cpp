@@ -6,11 +6,11 @@ int main() {
     SparseMatrixCSR csr(6, 4);
 
     // Add some non-zero values   
-    csr(0, 1) = 3.0;
-    csr(1, 0) = 4.0;
-    csr(2, 2) = 5.0;
-    csr(3, 3) = 6.7;
-    csr(0, 2) = 1.5;
+    csr.add_value(0, 1,3.0);
+    csr.add_value(1, 0,4.0);
+    csr.add_value(2, 2,5.0);
+    csr.add_value(3, 3,6.7);
+    csr.add_value(0, 2,1.5);
 
     csr.print();
 
@@ -58,12 +58,13 @@ int main() {
 
     SparseMatrixCOO coo(6, 4);
 
-    // Add some non-zero values  
-    coo(0, 1) = 3.0;
-    coo(1, 0) = 4.0;
-    coo(2, 2) = 5.0;
-    coo(3, 3) = 6.7;
-    coo(0, 2) = 1.5;
+    // Add some non-zero values
+    
+    coo.add_value(0, 1,3.0);
+    coo.add_value(1, 0,4.0);
+    coo.add_value(2, 2,5.0);
+    coo.add_value(3, 3,6.7);
+    coo.add_value(0, 2,1.5);
 
     coo.print();
 
@@ -103,4 +104,3 @@ int main() {
 
     return 0;
 }
-
