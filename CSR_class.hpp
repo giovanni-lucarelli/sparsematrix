@@ -20,7 +20,8 @@ public:
     unsigned int get_columns() override;
     unsigned int get_rows() override;
     unsigned int get_nnz() override;
-    double operator()(const unsigned int r_idx, const unsigned int c_idx) const override;
+    void add_value(const unsigned int row, const unsigned int col, const double value);
+    const double operator()(const unsigned int r_idx, const unsigned int c_idx) const override;
     double& operator()(const unsigned int r_idx, const unsigned int c_idx) override;
     std::vector<double> operator*(const std::vector<double>& vec) const override;
     void print() const override;

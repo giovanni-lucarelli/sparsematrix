@@ -10,7 +10,32 @@ unsigned int SparseMatrixCSR::get_rows(){
 unsigned int SparseMatrixCSR::get_nnz(){
         return values.size();
     }
-double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx) const {
+
+void SparseMatrixCSR::add_value(const unsigned int row, const unsigned int col, const double value){
+        if (row >= numRows || col >= numCols ) {
+            throw std::out_of_range("row index or column index is out of range");
+        }
+        // Determine the correct insertion position to maintain column order
+        unsigned int insert_pos = row_idx[row + 1];
+        for (unsigned int i = row_idx[row]; i < row_idx[row + 1]; i++) {
+            if (columns[i] > col) {
+                insert_pos = i;
+                break;
+            }
+        }
+
+        // Insert a new value (0.0) and update column and row indices
+        values.insert(values.begin() + insert_pos, value);
+        columns.insert(columns.begin() + insert_pos, col);
+
+        // Update row indexes to reflect the addition of a new element
+        // Increment the row pointers for all subsequent rows to account for the new entry
+        for (unsigned int i = row + 1; i <= numRows; i++) {
+            row_idx[i]++;
+        }
+    }
+    
+const double SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx) const {
         if (r_idx >= numRows || c_idx >= numCols) {
             throw std::out_of_range("row index or column index is out of range");
         }
@@ -35,8 +60,8 @@ double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int
                 return values[i]; // Return a reference to the value if found
             }
         }
-        
-        // Determine the correct insertion position to maintain column order
+        throw std::invalid_argument("Data not allocated");
+        /* // Determine the correct insertion position to maintain column order
         unsigned int insert_pos = row_idx[r_idx + 1];
         for (unsigned int i = row_idx[r_idx]; i < row_idx[r_idx + 1]; i++) {
             if (columns[i] > c_idx) {
@@ -55,7 +80,7 @@ double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int
             row_idx[i]++;
         }
 
-        return values[insert_pos]; // Return a reference to the newly inserted value
+        return values[insert_pos]; // Return a reference to the newly inserted value */
     }
 
 // Matrix-vector multiplication

@@ -10,7 +10,17 @@ unsigned int SparseMatrixCOO::get_rows(){
 unsigned int SparseMatrixCOO::get_nnz(){
         return values.size();
     }
-double SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned int col_idx) const{
+
+void SparseMatrixCOO::add_value(const unsigned int row, const unsigned int col, const double value){
+        if (row >= numRows || col >= numCols) {
+            throw std::invalid_argument("row index or column index is out of range");
+        }
+        rows.push_back(row);
+        columns.push_back(col);
+        values.push_back(value);
+    }
+
+const double SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned int col_idx) const{
         if (row_idx >= numRows || col_idx >= numCols) {
             throw std::invalid_argument("row index or column index is out of range");
         }
@@ -30,13 +40,14 @@ double& SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned 
                 return values[i];
             }
         }
-
-        std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated. Allocating now." << std::endl;
+        
+        throw std::invalid_argument("Data not allocated");
+        /*std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated." << std::endl;
         rows.push_back(row_idx);
         columns.push_back(col_idx);
         values.push_back(0.0);
         //Return a reference to the newly allocated entry
-        return values.back();
+        return values.back();*/
     }
 std::vector<double> SparseMatrixCOO::operator*(const std::vector<double>& vec) const{
         if (vec.size() != numCols) {
