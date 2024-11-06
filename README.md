@@ -17,3 +17,13 @@ the program will then be avaiable with the name "sparse_matrix".
     
 
 ## References
+
+## Errors
+```
+std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated." << std::endl;
+        rows.push_back(row_idx);
+        columns.push_back(col_idx);
+        values.push_back(0.0);
+        //Return a reference to the newly allocated entry
+        return values.back();
+```

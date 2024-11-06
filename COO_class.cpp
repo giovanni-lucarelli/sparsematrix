@@ -12,9 +12,11 @@ unsigned int SparseMatrixCOO::get_nnz()const{
     }
 
 void SparseMatrixCOO::add_value(const unsigned int row, const unsigned int col, const double value){
+        //check if the row, col index are in the proper range
         if (row >= numRows || col >= numCols) {
             throw std::invalid_argument("row index or column index is out of range");
         }
+        //storing the new value according to the COO representation
         rows.push_back(row);
         columns.push_back(col);
         values.push_back(value);
@@ -24,45 +26,47 @@ const double SparseMatrixCOO::operator() (const unsigned int row_idx, const unsi
         if (row_idx >= numRows || col_idx >= numCols) {
             throw std::invalid_argument("row index or column index is out of range");
         }
+        // if the value indexed by (row,col) exists return the value
         for (unsigned int i = 0; i < rows.size(); i++) {
             if (rows[i] == row_idx and columns[i] == col_idx) {
                 return values[i];
             }
         }
+        // if not return 0.0 (bc it is a sparse matrix)
         return 0.0;
     }
+
 double& SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned int col_idx) {
         if (row_idx >= numRows || col_idx >= numCols) {
             throw std::invalid_argument("row index or column index is out of range");
         }
+        // if the value indexed by (row,col) exists return the value
         for (unsigned int i = 0; i < rows.size(); i++) {
             if (rows[i]==row_idx and columns[i] == col_idx) {
                 return values[i];
             }
         }
-        
+        // if not throw an error bc w/ this method you cannot allocate/assign new values
         throw std::invalid_argument("Data not allocated");
-        /*std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated." << std::endl;
-        rows.push_back(row_idx);
-        columns.push_back(col_idx);
-        values.push_back(0.0);
-        //Return a reference to the newly allocated entry
-        return values.back();*/
     }
+
 std::vector<double> SparseMatrixCOO::operator*(const std::vector<double>& vec) const{
         if (vec.size() != numCols) {
             throw std::invalid_argument("Vector size must match the number of columns in the matrix.");
         }
-        std::vector<double> result(numRows, 0.0); // Initialize result vector with zeros
+        // Initialize result vector with zeros
+        std::vector<double> result(numRows, 0.0); 
+        // Compute the matrix-vector product
         for (unsigned int i = 0; i <= values.size(); ++i) {
             result[rows[i]] += values[i] * vec[columns[i]];
         }
         return result;
     }
+
 void SparseMatrixCOO::print() const {
         std::cout << "Sparse Matrix (COO format):" << std::endl;
         std::cout << "Matrix's shape: " << numRows << " x " << numCols << std::endl;
-    
+        //print only the non zero values of the matrix (all idxs are zero based)
         for (unsigned int row = 0; row < numRows; ++row) {
             for (unsigned int i = 0; i < values.size(); ++i) {
                 if (rows[i] == row) {
