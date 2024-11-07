@@ -73,7 +73,7 @@ The abstract base class provides a public interface that performs the following 
 - **get_columns(), get_rows(), get_nnz()**: Get the dimensions of the matrix and the number of non-zero elements.
 - **add_value()**: Adds a non-zero entry to the matrix. This method is essential to modify the content of the matrix and is implemented differently in the derived classes, depending on the representation (CSR or COO).
 - **operator()**: Operator overload to access the elements of the matrix. Allows you to get or modify the values at the positions specified by your row and column indices.
-- **operator* ()**: By overloading the `*` operator, it performs matrix-vector multiplication.
+- **operator\*()**: By overloading the `*` operator, it performs matrix-vector multiplication.
 - **print()**: Prints only the non zero values in a readable format.
 
 In each of the derived classes antoher method (**toCOO()**, **toCSR()**) has been implemented to convert each derived class to the other.
