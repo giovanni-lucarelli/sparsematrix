@@ -153,6 +153,8 @@ Additionally implementing this method, we didn't know how to throw an error when
 As a solution, we introduced the 'add_value()' method, which is a safer way to solve these problems.
     
 
-## References
+## References and tools
 
+**Davis, Timothy A.** *Direct Methods for Sparse Linear Systems.* United States: SIAM, Society for Industial and Applied Mathematics, 2006.
 
+**OpenAI.** *ChatGPT*, November 2023 version, OpenAI, 2023, https://chat.openai.com/.
