@@ -15,7 +15,7 @@ This is the program for the first homework assignment of the course Advanced Pro
 - [Classes and Methods](#classes-and-methods)
 - [Individual contributions](#classes-and-methods)
 - [Additional Information](#additional-information)
-- [References](#references)
+- [References and tools](#references-and-tools)
 
 
 ## Introduction
