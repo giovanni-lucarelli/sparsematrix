@@ -1,5 +1,6 @@
 # Authors: 
 **Elena Ruiz de la Cuesta**: elenaruizdelacuestacastano@gmail.com
+
 **Giovanni Lucarelli**: giovanni.lucarelli@studenti.units.it
 
 # Sparse Matrix
