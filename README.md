@@ -1,6 +1,5 @@
 # Authors: 
 **Elena Ruiz de la Cuesta**: elenaruizdelacuestacastano@gmail.com
-
 **Giovanni Lucarelli**: giovanni.lucarelli@studenti.units.it
 
 # Sparse Matrix
@@ -91,22 +90,28 @@ With reference to point number 4, slide 7 of the assignment, we tried to allocat
 
 **COO class**:
 ```
-...
+double& SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned int col_idx) {
+  if (row_idx >= numRows || col_idx >= numCols) {
+      throw std::invalid_argument("row index or column index is out of range");
+  }
+  for (unsigned int i = 0; i < rows.size(); i++) {
+      if (rows[i]==row_idx and columns[i] == col_idx) {
+          return values[i];
+      }
+  }
 
-std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated." << std::endl;
-  //allocating and adding the new indexes to the respective vectors
+  std::cout << "Warning: Entry at (" << row_idx << ", " << col_idx << ") not allocated. Allocating now." << std::endl;
   rows.push_back(row_idx);
   columns.push_back(col_idx);
-  //allocating and adding a 0 value in the vector values
   values.push_back(0.0);
   //Return a reference to the newly allocated entry
   return values.back();
-...
+}
+
 ```
 **CSR class**:
 ```
-...
-// Method for adding a value in the sparse matrix CSR
+
 double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx){
   if (r_idx >= numRows || c_idx >= numCols ) {
       throw std::out_of_range("row index or column index is out of range");
@@ -133,7 +138,7 @@ double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int
 
   return values[insert_pos]; // Return a reference to the newly inserted value
 }
-...
+
 ```
 While implementing the `operator()` method in both the `SparseMatrixCSR` and `SparseMatrixCOO` classes, we aimed to enable direct access and modification of elements at specific positions within the sparse matrix. Our implementation worked correctly in the following cases:
 
