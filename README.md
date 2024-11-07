@@ -31,7 +31,7 @@ To build the program, from the sparsematrix folder, write in the terminal the co
 bash ./build.sh
 ```
 
-the program will then be avaiable with the name "sparse_matrix".
+the program will then be avaiable with the name "sparse_matrix". Note that are provided two different `build.sh` file, one for each version (templated and not).
 
 ## Code structure
 The organisation of folders and files is as follows:
@@ -150,7 +150,7 @@ However, a problem ocurred when we accessed an unallocated position using `csr(i
 
 Additionally implementing this method, we didn't know how to throw an error whenever a zero value is assigned.
 
-As a solution, we introduced the 'add_value()' method, whic is a safer way to solve these problems.
+As a solution, we introduced the 'add_value()' method, which is a safer way to solve these problems.
     
 
 ## References

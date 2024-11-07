@@ -24,6 +24,7 @@ int main() {
     const SparseMatrixCSR constcsr = csr;
     std::cout << " - Element (0,1) of the constant version: " << constcsr(0,1) << std::endl;
     std::cout << " - Element (0,1) of the non constant version: " << csr(0,1) << std::endl;
+    std::cout << " - Element (1,1) of the non constant version: " << csr(1,1) << std::endl;
 
     csr(0,1) = 3.14;
     std::cout << " - Element (0,1) after the update (3.14): " << csr(0,1) << std::endl;
