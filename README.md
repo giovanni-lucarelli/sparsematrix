@@ -112,7 +112,6 @@ double& SparseMatrixCOO::operator() (const unsigned int row_idx, const unsigned 
 ```
 **CSR class**:
 ```
-
 double& SparseMatrixCSR::operator()(const unsigned int r_idx, const unsigned int c_idx){
   if (r_idx >= numRows || c_idx >= numCols ) {
       throw std::out_of_range("row index or column index is out of range");
